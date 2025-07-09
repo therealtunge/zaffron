@@ -31,6 +31,7 @@ uint16_t colors[8] = {0x3C7E, 0x4242, 0x4242, 0x4242, 0x7E5E, 0x7E0A, 0x7C56, 0x
 uint8_t rom[0xFFFF] = {0x06, 0x80, 0x0E, 0x00, 0x3E, 0xFF, 0x02, 0x3E, 0x00, 0x0E, 0x01, 0x02, 0x3E, 0x7E, 0x0E, 0x02, 0x02, 0x3E, 0xFF, 0x0E, 0x03, 0x02};
 uint8_t rom[0xFFFF];
 uint8_t ram[0xFFFF] = {0};
+uint8_t ramwrite[0xFFFF] = {0};
 void renderfunc(uint8_t *ram);
 void initram(uint8_t *rom, uint8_t *ram) {
 	memset(ram, 0, 0xFFFF);
@@ -95,6 +96,7 @@ int main(int argc, char *argv[]) {
 	size = ftell(fptr);
 	fseek(fptr, 0, SEEK_SET); 
 	fread(ram, 1, size, fptr);
+	fread(ramwrite, 1, size, fptr);
 	SDL_SetAppMetadata("Example Renderer Debug Texture", "1.0", "com.example.renderer-debug-text");
 
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
@@ -114,6 +116,7 @@ int main(int argc, char *argv[]) {
 		printf("oh no!\n");
 		exit(1);
 	}
+	uint8_t prev = 205;
 	for (;;) {
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {

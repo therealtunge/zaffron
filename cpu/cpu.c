@@ -1,4 +1,5 @@
 #include <cpu/cpu.h>
+#include <cpu/cbprefix.h>
 #include <emu/emu.h>
 #include <utils/utils.h>
 /*
@@ -550,7 +551,7 @@ void run_instruction(cpustate *state, uint8_t *ram) {
 		case (0x11): {
 			state->d = ram[pc+1];
 			state->e = ram[pc+2];
-			pc+=2;
+			pc+=3;
 			break;
 		}
 		case (0x12): {
@@ -636,15 +637,16 @@ void run_instruction(cpustate *state, uint8_t *ram) {
 		}
 		case (0x20): {
 			if (!state->flags.zero) {
-				pc+=ram[pc+1];
+				pc+=(int8_t)ram[pc+1];
+				pc+=2;
 			} else {
 				pc+=2;
 			}
 			break;
 		}
 		case (0x21): {
-			state->h = ram[pc+1];
-			state->l = ram[pc+2];
+			state->h = ram[pc+2];
+			state->l = ram[pc+1];
 			pc+=3;
 			break;
 		}
@@ -709,7 +711,8 @@ h_flag = 0; // h flag is always cleared
 		}
 		case (0x28): {
 			if (state->flags.zero) {
-				pc+=ram[pc+1];
+				pc+=(int8_t)ram[pc+1];
+				pc+=2;
 			} else {
 				pc+=2;
 			}
@@ -770,7 +773,7 @@ h_flag = 0; // h flag is always cleared
 		}
 		case (0x31): {
 			state->sp = _8to16(ram[pc+1], ram[pc+2]);
-			pc+=2;
+			pc+=3;
 			break;
 		}
 		case (0x32): {
@@ -863,6 +866,13 @@ h_flag = 0; // h flag is always cleared
 			break;
 		}
 // block 0x80 to 0xB0
+		case (0xC1): {
+			state->b = ram[state->sp-2];
+			state->c = ram[state->sp-1];
+			state->sp -= 2;
+			pc++;
+			break;
+		}
 		case (0xC2): {
 			if (!state->flags.zero) {
 				pc = _8to16(ram[pc+1], ram[pc+2]);
@@ -874,6 +884,13 @@ h_flag = 0; // h flag is always cleared
 		}
 		case (0xC3): {
 			pc = _8to16(ram[pc+1], ram[pc+2]);
+			break;
+		}
+		case (0xC5): {
+			ram[state->sp] = state->b;
+			ram[state->sp+1] = state->c;
+			state->sp += 2;
+			pc++;
 			break;
 		}
 		case (0xC9): {
@@ -892,11 +909,27 @@ h_flag = 0; // h flag is always cleared
 				break;
 			}
 		}
+		// oh no
+		case (0xCB): {
+			run0xcb(ram, state);
+			pc += 2;
+			break;
+		}
 		case (0xCD): {
 			ram[state->sp] = (pc & 0xFF00) >> 8;
 			ram[state->sp+1] = pc & 0x00FF;
-			pc = _8to16(ram[pc+1], ram[pc+2]);
+			pc = _8to16(ram[pc+2], ram[pc+1]);
 			state->sp += 2;
+			break;
+		}
+		case (0xE0): {
+			ram[0xFF00 + ram[pc+1]] = state->a;
+			pc+=2;
+			break;
+		}
+		case (0xE2): {
+			ram[0xFF00 + state->c] = state->a;
+			pc++;
 			break;
 		}
 		case (0xE9): {
@@ -992,7 +1025,7 @@ h_flag = 0; // h flag is always cleared
 		}
 		
 		default: {
-//			printf("unknown opcode at %d: %d\n", pc, ram[pc]);
+			printf("unknown instruction %d at %d\n", ram[pc], pc);
 			break;
 		}
 	}
