@@ -14,6 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: get deps
-      run: sudo apt install libsdl3-devel
+      run: sudo apt install libsdl3-dev
     - name: make
       run: make
