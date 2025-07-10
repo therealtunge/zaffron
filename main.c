@@ -71,7 +71,7 @@ void renderfunc(uint8_t *ram) {
 
 		gettimeofday(&stoprender, NULL);
 		deltatime = stoprender.tv_sec - startrender.tv_sec;
-		SDL_RenderDebugTextFormat(renderer, 0, 100, "FPS: %d", 1000000.0f / (float)deltatime);
+		SDL_RenderDebugTextFormat(renderer, 0, 100, "FPS: %d", deltatime);
 		if (deltatime / 1000 > (1000 / FPS)) {} else {
     		SDL_Delay((1000 / FPS) - deltatime / 1000);
 		}
