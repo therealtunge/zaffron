@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"utils.h": "c",
+		"pthread.h": "c",
+		"cstdlib": "c",
+		"2bpp.h": "c",
+		"sdl.h": "c",
+		"stdbool.h": "c"
+	}
+}

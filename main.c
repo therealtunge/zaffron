@@ -31,7 +31,6 @@ uint16_t colors[8] = {0x3C7E, 0x4242, 0x4242, 0x4242, 0x7E5E, 0x7E0A, 0x7C56, 0x
 uint8_t rom[0xFFFF] = {0x06, 0x80, 0x0E, 0x00, 0x3E, 0xFF, 0x02, 0x3E, 0x00, 0x0E, 0x01, 0x02, 0x3E, 0x7E, 0x0E, 0x02, 0x02, 0x3E, 0xFF, 0x0E, 0x03, 0x02};
 uint8_t rom[0xFFFF];
 uint8_t ram[0xFFFF] = {0};
-uint8_t ramwrite[0xFFFF] = {0};
 void renderfunc(uint8_t *ram);
 void initram(uint8_t *rom, uint8_t *ram) {
 	memset(ram, 0, 0xFFFF);
@@ -66,12 +65,22 @@ void renderfunc(uint8_t *ram) {
 		drawtilemap(draw, bgmap, renderer, scx * SIZE, scy * SIZE);
 		drawtilemap(draw, windowmap, renderer, wx * SIZE, wy * SIZE);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+		SDL_RenderDebugTextFormat(renderer, 0, 100, "Hello world!, %d", deltatime / 1000000);
+		SDL_RenderDebugText(renderer, 224, 150, "This is some debug text.");
+
+		SDL_SetRenderDrawColor(renderer, 51, 102, 255, SDL_ALPHA_OPAQUE);
+		SDL_RenderDebugText(renderer, 184, 200, "You can do it in different colors.");
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+
+		SDL_SetRenderScale(renderer, 4.0f, 4.0f);
+		SDL_RenderDebugText(renderer, 14, 65, "It can be scaled.");
+		SDL_SetRenderScale(renderer, 1.0f, 1.0f);
+		SDL_RenderDebugText(renderer, 64, 350, "This only does ASCII chars.  draw: 🤣");
 
 		SDL_RenderDebugTextFormat(renderer, (float) ((WINDOW_WIDTH - (charsize * 46)) / 2), 400, "a: %d, b: %d, c: %d, pc: %d", state.state.a, state.state.b, state.state.c, state.state.pc);
 
 		gettimeofday(&stoprender, NULL);
 		deltatime = stoprender.tv_sec - startrender.tv_sec;
-		SDL_RenderDebugTextFormat(renderer, 0, 100, "FPS: %d", deltatime);
 		if (deltatime / 1000 > (1000 / FPS)) {} else {
     		SDL_Delay((1000 / FPS) - deltatime / 1000);
 		}
@@ -86,8 +95,7 @@ int main(int argc, char *argv[]) {
 	size = ftell(fptr);
 	fseek(fptr, 0, SEEK_SET); 
 	fread(ram, 1, size, fptr);
-	fread(ramwrite, 1, size, fptr);
-	SDL_SetAppMetadata("Zaffron", "1.0", "com.tunge.gbemu.zaffron");
+	SDL_SetAppMetadata("Example Renderer Debug Texture", "1.0", "com.example.renderer-debug-text");
 
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
@@ -106,7 +114,6 @@ int main(int argc, char *argv[]) {
 		printf("oh no!\n");
 		exit(1);
 	}
-	uint8_t prev = 205;
 	for (;;) {
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
