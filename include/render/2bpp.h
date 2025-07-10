@@ -14,8 +14,12 @@ typedef struct rgb {
 typedef struct tile {
 	uint16_t colors[8];
 } tile;
+typedef struct tilemap_row {
+	uint8_t tileno[32];
+} tilemap_row;
 typedef struct tilemap {
 	uint8_t tileno[1024];
+	tilemap_row row[32];
 } tilemap;
 void drawtilemap(tile *tiles, tilemap map, SDL_Renderer *renderer, int x, int y);
 tilemap readtilemap(uint8_t *ram, bool no);

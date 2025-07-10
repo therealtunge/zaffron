@@ -18,8 +18,8 @@ static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 SDL_Event event;
 
-#define WINDOW_WIDTH 1280 // 640
-#define WINDOW_HEIGHT 650 // 480
+#define WINDOW_WIDTH 160 // 640
+#define WINDOW_HEIGHT 144 // 480
 #define FPS 60
 //uint8_t rom[] = { 0x3E, 0x10, 0x3E, 0x20, 0xC3, 0x00, 0x00 };
 //uint8_t rom[90] = {0x06, 0x12, 0x0E, 0x12, 0x3E, 0x7D, 0x02, 0xC3, 0x12, 0x12, 0x10};
@@ -62,20 +62,13 @@ void renderfunc(uint8_t *ram) {
 		draw[1] = _16totile(colors);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderClear(renderer);
-		drawtilemap(draw, bgmap, renderer, scx * SIZE, scy * SIZE);
-		drawtilemap(draw, windowmap, renderer, wx * SIZE, wy * SIZE);
+//		drawtilemap(draw, bgmap, renderer, scx * SIZE, scy * SIZE);
+//		drawtilemap(draw, windowmap, renderer, wx * SIZE, wy * SIZE);
+		for (int i = 0; i < 160; i++) {
+			drawlineoftilemap(draw, bgmap, renderer, 0, i, i);
+		}
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 		SDL_RenderDebugTextFormat(renderer, 0, 100, "Hello world!, %d", deltatime / 1000000);
-		SDL_RenderDebugText(renderer, 224, 150, "This is some debug text.");
-
-		SDL_SetRenderDrawColor(renderer, 51, 102, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDebugText(renderer, 184, 200, "You can do it in different colors.");
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-
-		SDL_SetRenderScale(renderer, 4.0f, 4.0f);
-		SDL_RenderDebugText(renderer, 14, 65, "It can be scaled.");
-		SDL_SetRenderScale(renderer, 1.0f, 1.0f);
-		SDL_RenderDebugText(renderer, 64, 350, "This only does ASCII chars.  draw: 🤣");
 
 		SDL_RenderDebugTextFormat(renderer, (float) ((WINDOW_WIDTH - (charsize * 46)) / 2), 400, "a: %d, b: %d, c: %d, pc: %d", state.state.a, state.state.b, state.state.c, state.state.pc);
 

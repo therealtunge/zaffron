@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Wpedantic -Iinclude -I/mingw64/include -O3 -std=c2x
+CFLAGS=-Wall -Wextra -Wpedantic -Iinclude -I/mingw64/include -O3 -std=c2x -g
 LDFLAGS= -L/mingw64/bin -lSDL3
 
 SOURCES=$(wildcard *.c utils/*.c cpu/*.c emu/*.c render/*.c)

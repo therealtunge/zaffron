@@ -9,5 +9,5 @@
 #include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
-void render_rgb_array(rgb *in, SDL_Renderer *renderer);
+bool is_tile_in_line(int y, int line);
 #endif
