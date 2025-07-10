@@ -21,7 +21,7 @@ typedef struct tilemap {
 	uint8_t tileno[1024];
 	tilemap_row row[32];
 } tilemap;
-void drawtilemap(tile *tiles, tilemap map, SDL_Renderer *renderer, int x, int y);
+void drawlineoftilemap(tile *tiles, tilemap map, SDL_Renderer *renderer, int x, int y, int line, int offset);
 tilemap readtilemap(uint8_t *ram, bool no);
 void readtile(uint8_t *ram, uint16_t *out);
 tile _16totile(uint16_t *in);

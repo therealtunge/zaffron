@@ -4,21 +4,21 @@
 #include <stdio.h>
 
 rgb palette[] = {{255, 255, 255}, {170, 170, 170}, {85, 85, 85}, {0, 0, 0}};
-void drawlineoftilemap(tile *tiles, tilemap map, SDL_Renderer *renderer, int x, int y, int line) {
+void drawlineoftilemap(tile *tiles, tilemap map, SDL_Renderer *renderer, int x, int y, int line, int offset) {
 	for (int i = 0; i < 32; i++) {
 		if (is_tile_in_line(y, line)) {
 			draw_row(tiles[map.tileno[i + ((line / 8) * 32)]].colors[line % 8],
-			renderer, (i * SIZEPERTILE) + x, y);
+			renderer, (i * SIZEPERTILE) + x, (line + offset) % 256);
 		}
 	}
 	return;
 }
-void drawtilemap(tile *tiles, tilemap map, SDL_Renderer *renderer, int x, int y) {
+/*void drawtilemap(tile *tiles, tilemap map, SDL_Renderer *renderer, int x, int y) {
 	for (int i = 0; i < 1024; i++) {
 		draw_tile(tiles[map.tileno[i]], renderer, ((i % 32) * SIZEPERTILE) + x, ((i / 32) * SIZEPERTILE) + y);
 	}
 	return;
-}
+}*/
 tilemap readtilemap(uint8_t *ram, bool no) {
 	tilemap ret;
 	if (no) {
@@ -66,7 +66,7 @@ void draw_row(uint16_t row, SDL_Renderer *renderer, int x, int y) {
 	decode_row(row, colors);
 	SDL_FRect fillRect = {0, y, SIZE, SIZE};
 	for (int i = 0; i < 8; i++) {
-		fillRect.x = (i*SIZE) + x;
+		fillRect.x = ((i*SIZE) + x) % 256;
 		SDL_SetRenderDrawColor(renderer, colors[i].r, colors[i].g, colors[i].b, SDL_ALPHA_OPAQUE);
 		SDL_RenderFillRect(renderer, &fillRect);
 	}

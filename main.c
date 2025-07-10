@@ -64,8 +64,8 @@ void renderfunc(uint8_t *ram) {
 		SDL_RenderClear(renderer);
 //		drawtilemap(draw, bgmap, renderer, scx * SIZE, scy * SIZE);
 //		drawtilemap(draw, windowmap, renderer, wx * SIZE, wy * SIZE);
-		for (int i = 0; i < 160; i++) {
-			drawlineoftilemap(draw, bgmap, renderer, 0, i, i);
+		for (int i = 0; i < 256; i++) {
+			drawlineoftilemap(draw, bgmap, renderer, scx, i, i, scy); // "why the cursed function call, tunge?" i dont even know its just broken pray it works
 		}
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 		SDL_RenderDebugTextFormat(renderer, 0, 100, "Hello world!, %d", deltatime / 1000000);
