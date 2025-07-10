@@ -66,12 +66,12 @@ void renderfunc(uint8_t *ram) {
 		drawtilemap(draw, bgmap, renderer, scx * SIZE, scy * SIZE);
 		drawtilemap(draw, windowmap, renderer, wx * SIZE, wy * SIZE);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDebugTextFormat(renderer, 0, 100, "FPS: %d", 1000000.0f / deltatime);
 
 		SDL_RenderDebugTextFormat(renderer, (float) ((WINDOW_WIDTH - (charsize * 46)) / 2), 400, "a: %d, b: %d, c: %d, pc: %d", state.state.a, state.state.b, state.state.c, state.state.pc);
 
 		gettimeofday(&stoprender, NULL);
 		deltatime = stoprender.tv_sec - startrender.tv_sec;
+		SDL_RenderDebugTextFormat(renderer, 0, 100, "FPS: %d", 1000000.0f / (float)deltatime);
 		if (deltatime / 1000 > (1000 / FPS)) {} else {
     		SDL_Delay((1000 / FPS) - deltatime / 1000);
 		}
