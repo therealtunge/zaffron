@@ -66,17 +66,7 @@ void renderfunc(uint8_t *ram) {
 		drawtilemap(draw, bgmap, renderer, scx * SIZE, scy * SIZE);
 		drawtilemap(draw, windowmap, renderer, wx * SIZE, wy * SIZE);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDebugTextFormat(renderer, 0, 100, "Hello world!, %d", deltatime / 1000000);
-		SDL_RenderDebugText(renderer, 224, 150, "This is some debug text.");
-
-		SDL_SetRenderDrawColor(renderer, 51, 102, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDebugText(renderer, 184, 200, "You can do it in different colors.");
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-
-		SDL_SetRenderScale(renderer, 4.0f, 4.0f);
-		SDL_RenderDebugText(renderer, 14, 65, "It can be scaled.");
-		SDL_SetRenderScale(renderer, 1.0f, 1.0f);
-		SDL_RenderDebugText(renderer, 64, 350, "This only does ASCII chars.  draw: 🤣");
+		SDL_RenderDebugTextFormat(renderer, 0, 100, "FPS: %d", 1000000 / deltatime);
 
 		SDL_RenderDebugTextFormat(renderer, (float) ((WINDOW_WIDTH - (charsize * 46)) / 2), 400, "a: %d, b: %d, c: %d, pc: %d", state.state.a, state.state.b, state.state.c, state.state.pc);
 
@@ -97,7 +87,7 @@ int main(int argc, char *argv[]) {
 	fseek(fptr, 0, SEEK_SET); 
 	fread(ram, 1, size, fptr);
 	fread(ramwrite, 1, size, fptr);
-	SDL_SetAppMetadata("Example Renderer Debug Texture", "1.0", "com.example.renderer-debug-text");
+	SDL_SetAppMetadata("Zaffron", "1.0", "com.tunge.gbemu.zaffron");
 
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
